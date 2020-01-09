@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Phy_Mat/Sleppery.tres" type="PhysicsMaterial" id=1]
+[ext_resource path="res://Scripts/Player_Move.gd" type="Script" id=2]
+[ext_resource path="res://Sprites/Player.png" type="Texture" id=3]
+
+[sub_resource type="CapsuleShape2D" id=1]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 1.5
+
+[node name="Player" type="Node2D"]
+
+[node name="Player" type="RigidBody2D" parent="." groups=[
+"Player",
+]]
+position = Vector2( 0, -20 )
+collision_mask = 2
+mode = 2
+physics_material_override = ExtResource( 1 )
+continuous_cd = 1
+contact_monitor = true
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Player_Collision" type="CollisionShape2D" parent="Player"]
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="Player"]
+position = Vector2( 2, 13 )
+scale = Vector2( 0.75, 0.75 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -20 )
+
+[node name="Ground_Check" type="Area2D" parent="Player"]
+editor/display_folded = true
+
+[node name="Ground_Checker" type="CollisionShape2D" parent="Player/Ground_Check"]
+position = Vector2( 0, 20 )
+shape = SubResource( 2 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2( 0, 20 )
+current = true
+zoom = Vector2( 2, 2 )
+smoothing_enabled = true
+smoothing_speed = 10.0
+offset_v = -0.3
+editor_draw_limits = true
+editor_draw_drag_margin = true
+[connection signal="body_entered" from="Player/Ground_Check" to="Player" method="_on_Ground_Check_body_entered"]
+[connection signal="body_exited" from="Player/Ground_Check" to="Player" method="_on_Ground_Check_body_exited"]
